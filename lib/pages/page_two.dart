@@ -7,7 +7,30 @@ class PageTwo extends StatelessWidget {
       appBar: AppBar(
         title: Text('Pagina Dos'),
       ),
-      body: Container(),
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MaterialButton(
+            child: Text('Establecer usuario'),
+            color: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+          MaterialButton(
+            child: Text('Cambiar edad'),
+            color: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+          MaterialButton(
+            child: Text('Agregar profesion'),
+            color: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+        ],
+      )),
     );
   }
 }
