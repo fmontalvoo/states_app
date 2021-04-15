@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:states_app/models/user.dart';
+
+import 'package:states_app/services/user_service.dart';
 
 class PageOne extends StatelessWidget {
+  final userService = UserService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Pagina Uno')),
-      body: UserInfo(),
+      body: StreamBuilder<User>(
+          stream: userService.userStream,
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? UserInfo(user: snapshot.data)
+                : Center(child: Text('No existe información del usuario'));
+          }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.accessibility_new),
         onPressed: () {
@@ -17,9 +27,9 @@ class PageOne extends StatelessWidget {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
-    Key key,
-  }) : super(key: key);
+  final User user;
+
+  const UserInfo({this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +46,15 @@ class UserInfo extends StatelessWidget {
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Nombre:')),
-              ListTile(title: Text('Edad:')),
+              ListTile(title: Text('Nombre: ${user.nombre}')),
+              ListTile(title: Text('Edad: ${user.edad}')),
               Text('Profesiones',
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Profesion')),
+              ...user.profesiones
+                  .map((profesion) => ListTile(title: Text(profesion)))
+                  .toList(),
             ],
           ),
         ));
