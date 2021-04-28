@@ -8,9 +8,11 @@ import 'package:states_app/services/user_service.dart';
 class PageTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userService = context.watch<UserService>();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pagina Dos'),
+        title: Text(userService.user?.nombre ?? 'Pagina Dos'),
       ),
       body: Center(
           child: Column(
@@ -21,23 +23,27 @@ class PageTwo extends StatelessWidget {
             color: Colors.blue,
             textColor: Colors.white,
             onPressed: () {
-              final userService = context.read<UserService>();
-              // final userService = Provider.of<UserService>(context, listen: false);
-              userService.user =
-                  new User(nombre: 'Alan Brito', edad: 24, profesiones: []);
+              userService.user = new User(
+                  nombre: 'Alan Brito',
+                  edad: 24,
+                  profesiones: ['Ingeniero de Sistemas', 'Filosofo']);
             },
           ),
           MaterialButton(
             child: Text('Cambiar edad'),
             color: Colors.blue,
             textColor: Colors.white,
-            onPressed: context.read<UserService>().cambiarEdad,
+            onPressed: userService.cambiarEdad,
+            // onPressed: context.read<UserService>().cambiarEdad,
           ),
           MaterialButton(
             child: Text('Agregar profesion'),
             color: Colors.blue,
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              userService
+                  .agregarProfesiones(['Programador', 'Full stack developer']);
+            },
           ),
         ],
       )),

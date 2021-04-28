@@ -60,7 +60,8 @@ class UserInfo extends StatelessWidget {
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Profesion')),
+              for (String profesion in user.profesiones)
+                ListTile(title: Text(profesion))
             ],
           ),
         ));

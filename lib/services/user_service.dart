@@ -24,5 +24,10 @@ class UserService with ChangeNotifier {
     notifyListeners();
   }
 
+  void agregarProfesiones(List<String> profesiones) {
+    this._user.profesiones.addAll(profesiones);
+    notifyListeners();
+  }
+
   bool get userExists => (this._user != null);
 }
