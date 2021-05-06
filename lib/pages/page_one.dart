@@ -2,18 +2,38 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:states_app/models/user.dart';
+
 import 'package:states_app/bloc/user/user_cubit.dart';
 
 class PageOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pagina Uno')),
+      appBar: AppBar(
+        title: Text('Pagina Uno'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_forever),
+            onPressed: context.read<UserCubit>().deleteUser,
+          )
+        ],
+      ),
       body: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
-          if (state is UserInitialState)
-            return Center(child: Text('No existe información del usuario'));
-          return UserInfo();
+          // if (state is UserInitialState) return Center(child: Text('No existe información del usuario'));
+          // if (state is UserLoadedState) return UserInfo(user: state.user);
+
+          switch (state.runtimeType) {
+            case UserInitialState:
+              return Center(child: Text('No existe información del usuario'));
+              break;
+            case UserLoadedState:
+              return UserInfo(user: (state as UserLoadedState).user);
+              break;
+            default:
+              return Center(child: CircularProgressIndicator());
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -27,9 +47,9 @@ class PageOne extends StatelessWidget {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
-    Key key,
-  }) : super(key: key);
+  final User user;
+
+  const UserInfo({this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +66,15 @@ class UserInfo extends StatelessWidget {
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Nombre:')),
-              ListTile(title: Text('Edad:')),
+              ListTile(title: Text('Nombre: ${user.nombre}')),
+              ListTile(title: Text('Edad: ${user.edad}')),
               Text('Profesiones',
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Profesion')),
+              ...user.profesiones
+                  .map((profesion) => ListTile(title: Text(profesion)))
+                  .toList()
             ],
           ),
         ));
