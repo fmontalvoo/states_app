@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:states_app/bloc/user/user_cubit.dart';
+
 class PageOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Pagina Uno')),
-      body: UserInfo(),
+      body: BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          if (state is UserInitialState)
+            return Center(child: Text('No existe información del usuario'));
+          return UserInfo();
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.accessibility_new),
         onPressed: () {
