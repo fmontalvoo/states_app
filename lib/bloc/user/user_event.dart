@@ -8,3 +8,17 @@ class LoadUserEvent extends UserEvent {
 
   LoadUserEvent(this.user);
 }
+
+class ChangeUserAgeEvent extends UserEvent {
+  final int edad;
+
+  ChangeUserAgeEvent(this.edad);
+}
+
+class AddUserProfessionsEvent extends UserEvent {
+  final List<String> profesiones;
+
+  AddUserProfessionsEvent(this.profesiones);
+}
+
+class DeleteUserEvent extends UserEvent {}

@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:states_app/models/user.dart';
+
+import 'package:states_app/bloc/user/user_bloc.dart';
+
 class PageOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pagina Uno')),
-      body: UserInfo(),
+      appBar: AppBar(
+        title: Text('Pagina Uno'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.delete_forever),
+              onPressed: () => context.read<UserBloc>().add(DeleteUserEvent()))
+        ],
+      ),
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state.userExists) return UserInfo(user: state.user);
+
+          return Center(child: Text('No existe información del usuario'));
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.accessibility_new),
         onPressed: () {
@@ -17,9 +36,9 @@ class PageOne extends StatelessWidget {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
-    Key key,
-  }) : super(key: key);
+  final User user;
+
+  const UserInfo({this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +55,14 @@ class UserInfo extends StatelessWidget {
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Nombre:')),
-              ListTile(title: Text('Edad:')),
+              ListTile(title: Text('Nombre: ${user.nombre}')),
+              ListTile(title: Text('Edad: ${user.edad}')),
               Text('Profesiones',
                   style:
                       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
               Divider(),
-              ListTile(title: Text('Profesion')),
+              for (String profesion in user.profesiones)
+                ListTile(title: Text(profesion))
             ],
           ),
         ));
