@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class PageOne extends StatelessWidget {
   @override
@@ -8,9 +9,7 @@ class PageOne extends StatelessWidget {
       body: UserInfo(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.accessibility_new),
-        onPressed: () {
-          Navigator.pushNamed(context, 'two');
-        },
+        onPressed: () => Get.toNamed('two'),
       ),
     );
   }
